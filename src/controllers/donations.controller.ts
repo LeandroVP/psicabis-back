@@ -46,7 +46,7 @@ class DonationsController {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    await pool.query('INSERT INTO donations set ?', { ...req.params, id }, (err, result) => {
+    await pool.query('INSERT INTO donations set ?', { ...req.body, id }, (err, result) => {
       if (err) throw (err)
       res.json({ id });
     });
