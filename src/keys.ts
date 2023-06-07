@@ -5,6 +5,7 @@ export default {
     user: 'root',
     password: '',
     database: 'psicabis_db',
+    multipleStatements: true
     //port: ''
   }
 
