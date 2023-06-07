@@ -4,6 +4,8 @@ import cors from 'cors'
 import donationsRoutes from "./routes/donations.routes"
 import indexRoutes from "./routes/index.routes"
 import imagesRoutes from "./routes/images.routes";
+import publicationsRoutes from "./routes/publications.routes";
+import categoriesRoutes from "./routes/categories.routes";
 class Server {
     public app: Application;
 
@@ -25,6 +27,8 @@ class Server {
         this.app.use(indexRoutes)
         this.app.use('/api/donations', donationsRoutes)
         this.app.use('/api/images', imagesRoutes)
+        this.app.use('/api/publications', publicationsRoutes)
+        this.app.use('/api/categories', categoriesRoutes)
     }
 
     start() {
