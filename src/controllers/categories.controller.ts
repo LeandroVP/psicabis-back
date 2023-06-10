@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { randomUUID } from 'crypto';
 
 import { body, check, validationResult } from 'express-validator';
-import { idMatches } from './validators/id-matches.validator';
+import { idMatches } from '../validators/id-matches.validator';
 import pool from '../database';
 
 
@@ -24,7 +24,6 @@ class CategoriesController {
   // ]
 
   public async list(req: Request, res: Response) {
-    console.log('listed')
     await pool.query('SELECT * FROM categories ORDER BY updated DESC', (err, result) => {
       if (err) throw (err)
       res.json(result);

@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto';
 import { body, check, validationResult } from 'express-validator';
 
 import pool from '../database'
-import { idMatches } from './validators/id-matches.validator';
+import { idMatches } from '../validators/id-matches.validator';
 
 
 
