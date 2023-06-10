@@ -10,17 +10,16 @@ class ValidateTokenHandler {
     if (authHeader && authHeader.startsWith("Bearer")) {
       token = authHeader.split(" ")[1];
       verify(token, process.env.JWT_SECRET, (err, dec) => {
-        // if (err) {
-        //   res.status(401);
-        //   throw new Error('unauthorized')
-        // }
-        req.body = { ...req.body, USER_DECODED_ID: dec.id }
+        if (err) {
+          res.status(401).json('unauthorized');
+        }
+        else {
+          req.body = { ...req.body, USER_DECODED_ID: dec.id };
+          next();
+        }
       })
     }
-    next();
   }
 }
 
 export const validateTokenHandler = new ValidateTokenHandler();
-
-// https://www.youtube.com/watch?v=ICMnoKxlYYg
