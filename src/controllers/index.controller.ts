@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 class IndexController {
 
   public index(req: Request, res: Response) {
-    res.json({ tex: 'API Is /api/donations' })
+    res.json({ tex: 'API Is /api/' })
 
   }
 };

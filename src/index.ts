@@ -6,6 +6,8 @@ import indexRoutes from "./routes/index.routes"
 import imagesRoutes from "./routes/images.routes";
 import publicationsRoutes from "./routes/publications.routes";
 import categoriesRoutes from "./routes/categories.routes";
+import authRoutes from "./routes/auth.routes";
+import 'dotenv/config'
 class Server {
     public app: Application;
 
@@ -29,6 +31,7 @@ class Server {
         this.app.use('/api/images', imagesRoutes)
         this.app.use('/api/publications', publicationsRoutes)
         this.app.use('/api/categories', categoriesRoutes)
+        this.app.use('/api/auth', authRoutes)
     }
 
     start() {
