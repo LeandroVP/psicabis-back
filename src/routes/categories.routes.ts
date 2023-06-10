@@ -1,3 +1,4 @@
+import { validateTokenHandler } from './../middleware/validateTokenHandler';
 import { Router } from "express";
 import { categoriesController } from "../controllers/categories.controller";
 
@@ -10,7 +11,7 @@ class CategoriesRoutes {
   }
 
   config() {
-    this.router.get('/', categoriesController.list)
+    this.router.get('/', validateTokenHandler.validate, categoriesController.list)
     this.router.get('/:id', categoriesController.element)
     // this.router.post('/', categoriesController.newDonationValidator, categoriesController.create)
     // this.router.put('/:id', categoriesController.updateDonationValidator, categoriesController.update)
