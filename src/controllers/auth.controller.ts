@@ -72,13 +72,20 @@ class AuthController {
   }
 
   public async userInfo(req: Request, res: Response) {
-    console.log(req.body.USER_DECODED_ID)
-    await pool.query('SELECT id, name, familyName, email FROM  users WHERE id = ?', req.body.USER_DECODED_ID, (err, result) => {
+    console.log(req.params.USER_DECODED_ID)
+    await pool.query('SELECT id, name, familyName, email FROM  users WHERE id = ?', req.params.USER_DECODED_ID, (err, result) => {
       if (err) console.log(err)
       res.json(result[0]);
     });
   }
 
+  public async updateUserInfo(req: Request, res: Response) {
+
+    await pool.query('UPDATE users set ? WHERE id = ?', [req.body, req.params.USER_DECODED_ID], (err, result) => {
+      if (err) console.log(err)
+      res.json(result[0]);
+    });
+  }
 
 };
 

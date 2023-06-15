@@ -14,7 +14,7 @@ class ValidateTokenHandler {
           res.status(401).json('unauthorized');
         }
         else {
-          req.body = { ...req.body, USER_DECODED_ID: dec.id };
+          req.params = { ...req.params, USER_DECODED_ID: dec.id }
           next();
         }
       })
