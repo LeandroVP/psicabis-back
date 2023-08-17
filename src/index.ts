@@ -1,4 +1,5 @@
 import express, { Application } from "express";
+import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import cors from 'cors'
 import donationsRoutes from "./routes/donations.routes"
@@ -18,11 +19,11 @@ class Server {
     }
 
     config() {
+        this.app.use(bodyParser.json({ limit: '10mb' }));
+        this.app.use(bodyParser.urlencoded({ extended: true, limit: '1000mb' }));
         this.app.set('port', process.env.PORT || 3000)
         this.app.use(morgan('dev'));
         this.app.use(cors());
-        this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: false }))
     }
 
     routes() {
