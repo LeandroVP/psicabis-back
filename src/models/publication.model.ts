@@ -12,7 +12,6 @@ export interface PublicationCore {
   description: string;
   img: string;
   modules: Module[];
-
 }
 
 export interface Module {
