@@ -19,11 +19,11 @@ class Server {
     }
 
     config() {
-        this.app.use(bodyParser.json({ limit: '10mb' }));
-        this.app.use(bodyParser.urlencoded({ extended: true, limit: '1000mb' }));
         this.app.set('port', process.env.PORT || 3000)
         this.app.use(morgan('dev'));
         this.app.use(cors());
+        this.app.use(bodyParser.json({ limit: '100mb' }));
+        this.app.use(bodyParser.urlencoded({ extended: true, limit: '1000mb' }));
     }
 
     routes() {
