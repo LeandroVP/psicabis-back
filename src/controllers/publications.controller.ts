@@ -41,7 +41,6 @@ class PublicationsController {
   }
 
   public async create(req: Request<any, any, PublicationCore>, res: Response) {
-    console.log('creating')
     const authorId = req.params.USER_DECODED_ID;
     const publicationId = randomUUID();
     const newPublication = req.body;
@@ -79,18 +78,25 @@ class PublicationsController {
   }
 
   public async update(req: Request, res: Response) {
-    console.log('editing')
     const lastEditorId = req.params.USER_DECODED_ID;
     const editedPublication: Publication = req.body.publication;
     const deletedModulesId: string[] = req.body.deletedModulesId;
+    const deletedContentsId: string[] = req.body.deletedContentsId;
     let modulesQuery = '';
     let contentsQuery = '';
     let deletedModulesQuery = '';
+    let deletedContentsQuery = '';
     let contents = [];
     let modules = [];
     if (deletedModulesId.length > 0) {
       deletedModulesId.forEach(id => {
         deletedModulesQuery += 'DELETE FROM modules WHERE id = ?;'
+
+      });
+    }
+    if (deletedContentsId.length > 0) {
+      deletedContentsId.forEach(id => {
+        deletedContentsQuery += 'DELETE FROM contents WHERE id = ?;'
 
       });
     }
@@ -119,7 +125,7 @@ class PublicationsController {
     })
     modules = [...editedPublication.modules];
     delete editedPublication.modules;
-    await pool.query(`UPDATE publications set ? WHERE id = '${editedPublication.id}';` + modulesQuery + contentsQuery + deletedModulesQuery, [{ ...editedPublication, lastEditorId }, ...modules, ...contents, ...deletedModulesId], (err, result) => {
+    await pool.query(`UPDATE publications set ? WHERE id = '${editedPublication.id}';` + modulesQuery + contentsQuery + deletedModulesQuery + deletedContentsQuery, [{ ...editedPublication, lastEditorId }, ...modules, ...contents, ...deletedModulesId, ...deletedContentsId], (err, result) => {
       if (err) throw (err)
       res.json({ message: 'EDITED' })
     });
