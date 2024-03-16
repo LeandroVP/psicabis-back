@@ -1,0 +1,35 @@
+import { Request, Response } from 'express';
+import { randomUUID } from 'crypto';
+
+import { body, check, validationResult } from 'express-validator';
+import { idMatches } from '../validators/id-matches.validator';
+import pool from '../database';
+
+
+class DashboardController {
+
+  // public newDonationValidator = [
+  //   check('lastName').isLength({ min: 3 }).trim().escape(),
+  //   check('firstName').isLength({ min: 3 }).trim().escape(),
+  //   check('email').isEmail().normalizeEmail(),
+  //   check('amount').isNumeric().trim().escape(),
+  //   check('documentNumber').isLength({ min: 9, max: 9 }).trim().escape(),
+  //   check('amount').isNumeric().isLength({ max: 7 }).trim().escape(),
+  // ]
+
+  // public updateDonationValidator = [
+  //   ...this.newDonationValidator,
+  //   check('date').isISO8601(),
+  //   body('id').custom(idMatches)
+  // ]
+
+  public async list(req: Request, res: Response) {
+    await pool.query('SELECT p.*, u.name, u.familyName, u.name AS authorName, u.familyName AS authorFamilyName FROM publications p LEFT JOIN users u ON p.authorId = u.id ORDER BY p.created DESC LIMIT 5', (err, result) => {
+      if (err) throw (err)
+      res.json(result);
+    })
+  }
+
+};
+
+export const dashboardController = new DashboardController();

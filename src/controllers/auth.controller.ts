@@ -41,9 +41,6 @@ class AuthController {
 
   public async login(req: Request<{}, {}, { email: string, password: string }>, res: Response) {
 
-
-
-
     await pool.query('SELECT hash, salt, id, email FROM users WHERE email = ?', req.body.email, (err, result) => {
       let currentDate = new Date();
       if (err) console.log(err)
