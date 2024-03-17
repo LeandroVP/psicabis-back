@@ -1,3 +1,4 @@
+import { Category } from './../models/category.model';
 import { Request, Response } from 'express';
 import { randomUUID } from 'crypto';
 
@@ -28,6 +29,44 @@ class DashboardController {
       if (err) throw (err)
       res.json(result);
     })
+  }
+
+  public async updateSelectedData(req: Request, res: Response) {
+    await pool.query('DELETE FROM config; INSERT INTO config set ?', { ...req.body }, (err, result) => {
+      if (err) throw (err)
+      res.json(result);
+    })
+  }
+
+  public async selectedData(req: Request, res: Response) {
+
+    const ids = await new Promise((resolve) => {
+      pool.query('SELECT * FROM config ', (err, result) => {
+        resolve(result)
+      })
+    })
+    let selectedData = {
+      publications: [],
+      categories: []
+    }
+    // let publications: Publication[];
+    // let categories: Category[];
+    const publicationsIds: string[] = ids[0].publications.split(", ");
+    const categoriesIds: string[] = ids[0].categories.split(", ");
+
+    const publications = await new Promise((resolve) => {
+      pool.query(`SELECT * FROM publications WHERE id IN( ? ) ORDER BY FIELD(id, ?);`, [publicationsIds, publicationsIds], (err, result) => {
+        resolve(result)
+      })
+    })
+
+    const categories = await new Promise((resolve) => {
+      pool.query(`SELECT * FROM categories WHERE id IN( ? ) ORDER BY FIELD(id, ?);`, [categoriesIds, categoriesIds], (err, result) => {
+        resolve(result)
+      })
+    })
+
+    res.json({ publications, categories })
   }
 
 };

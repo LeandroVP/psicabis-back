@@ -12,6 +12,8 @@ class DashboardRoutes {
 
   config() {
     this.router.get('/', validateTokenHandler.validate, dashboardController.list)
+    this.router.get('/selected', validateTokenHandler.validate, dashboardController.selectedData)
+    this.router.put('/selected', validateTokenHandler.validate, dashboardController.updateSelectedData)
   }
 }
 
