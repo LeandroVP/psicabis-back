@@ -68,7 +68,6 @@ class CategoriesController {
 
     await pool.query('UPDATE categories set ? WHERE id = ?', [req.body, req.params.id], (err, result) => {
       if (err) throw (err)
-      console.log(result)
       res.json({ message: 'UPDATED' })
     })
   }
