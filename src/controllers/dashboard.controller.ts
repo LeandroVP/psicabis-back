@@ -25,10 +25,14 @@ class DashboardController {
   // ]
 
   public async list(req: Request, res: Response) {
-    await pool.query('SELECT p.*, u.name, u.familyName, u.name AS authorName, u.familyName AS authorFamilyName FROM publications p LEFT JOIN users u ON p.authorId = u.id ORDER BY p.created DESC LIMIT 5', (err, result) => {
-      if (err) throw (err)
-      res.json(result);
-    })
+    await pool.query(
+      'SELECT p.*, usr.name AS lastEditorName, usr.familyName AS lastEditorFamilyName, u.name AS authorName, u.familyName AS authorFamilyName  ' +
+      'FROM publications p LEFT JOIN users AS u ON p.authorId = u.id  LEFT JOIN users AS usr ON p.lastEditorId = usr.id ' +
+      'ORDER BY p.created DESC LIMIT 10'
+      , (err, result) => {
+        if (err) throw (err)
+        res.json(result);
+      })
   }
 
   public async updateSelectedData(req: Request, res: Response) {
@@ -45,12 +49,7 @@ class DashboardController {
         resolve(result)
       })
     })
-    let selectedData = {
-      publications: [],
-      categories: []
-    }
-    // let publications: Publication[];
-    // let categories: Category[];
+
     const publicationsIds: string[] = ids[0].publications.split(", ");
     const categoriesIds: string[] = ids[0].categories.split(", ");
 
@@ -68,6 +67,7 @@ class DashboardController {
 
     res.json({ publications, categories })
   }
+
 
 };
 

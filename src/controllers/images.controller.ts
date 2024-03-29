@@ -54,7 +54,6 @@ class ImagesController {
     // if (!errors.isEmpty()) {
     //   return res.status(400).json({ errors: errors.array() });
     // }
-    console.log(req.file)
     // res.json({ message: 'OK' })
 
     await pool.query('INSERT INTO images set ?', { path: req.file.path, id, originalname: req.file.originalname }, (err, result) => {
@@ -80,7 +79,6 @@ class ImagesController {
 
     await pool.query('UPDATE images set ? WHERE id = ?', [req.body, req.params.id], (err, result) => {
       if (err) throw (err)
-      console.log(result)
       res.json({ message: 'UPDATED' })
     })
   }
