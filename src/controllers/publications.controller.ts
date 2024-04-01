@@ -17,6 +17,15 @@ class PublicationsController {
 
   }
 
+  public async listByCategory(req: Request, res: Response) {
+    const id = req.params.id || '*'
+    await pool.query('SELECT p.*, u.name, u.familyName, u.name AS authorName, u.familyName AS authorFamilyName FROM publications p LEFT JOIN users u ON p.authorId = u.id WHERE p.categoryId = ? ORDER BY created', id, (err, result) => {
+      if (err) throw (err)
+      res.json(result);
+    })
+
+  }
+
   public async element(req: Request, res: Response) {
 
     const contents = await new Promise<ModuleContent[]>((resolve) => {

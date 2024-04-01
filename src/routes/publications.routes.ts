@@ -12,8 +12,9 @@ class PublicationsRoutes {
   }
 
   config() {
-    this.router.get('/', validateTokenHandler.validate, publicationsController.list)
-    this.router.get('/:id', validateTokenHandler.validate, publicationsController.element)
+    this.router.get('/', publicationsController.list)
+    this.router.get('/:id', publicationsController.element)
+    this.router.get('/category/:id', publicationsController.listByCategory)
     this.router.post('/', validateTokenHandler.validate, publicationsController.create)
     this.router.put('/:id', validateTokenHandler.validate, publicationsController.update)
     this.router.delete('/:id', validateTokenHandler.validate, publicationsController.delete)
