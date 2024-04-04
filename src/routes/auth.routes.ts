@@ -15,6 +15,7 @@ class AuthRoutes {
     this.router.post('/login', authController.login)
     this.router.get('/userInfo', validateTokenHandler.validate, authController.userInfo)
     this.router.put('/userInfo', validateTokenHandler.validate, authController.updateUserInfo)
+    this.router.put('/changePassword', validateTokenHandler.validate, authController.changePassword)
   }
 }
 
