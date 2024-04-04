@@ -12,12 +12,10 @@ class CategoriesRoutes {
 
   config() {
     this.router.get('/', validateTokenHandler.validate, categoriesController.list)
-    this.router.get('/:id', categoriesController.element)
-    // this.router.post('/', categoriesController.newDonationValidator, categoriesController.create)
-    // this.router.put('/:id', categoriesController.updateDonationValidator, categoriesController.update)
-    this.router.post('/', categoriesController.create)
-    this.router.put('/:id', categoriesController.update)
-    this.router.delete('/:id', categoriesController.delete)
+    this.router.get('/:id', validateTokenHandler.validate, categoriesController.element)
+    this.router.post('/', validateTokenHandler.validate, categoriesController.create)
+    this.router.put('/:id', validateTokenHandler.validate, categoriesController.update)
+    this.router.delete('/:id', validateTokenHandler.validate, categoriesController.delete)
   }
 }
 

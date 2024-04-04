@@ -1,3 +1,4 @@
+import { PasswordHelper } from './../helpers/password.helper';
 import { Request, Response } from 'express';
 import { pbkdf2Sync, randomBytes, randomUUID } from 'crypto';
 import { sign } from 'jsonwebtoken';
@@ -8,43 +9,13 @@ import pool from '../database'
 
 class AuthController {
 
-  static salt() {
-    return randomBytes(20).toString('hex');
-  }
-
-  static hash(password, salt) {
-    return pbkdf2Sync(password, salt,
-      1000, 64, `sha512`).toString(`hex`);
-  }
-
-  static valid(password, salt, hash) {
-    return AuthController.hash(password, salt) === hash
-  }
-
-
-  // public async register(req: Request, res: Response) {
-  //   let salt = AuthController.salt()
-  //   let hash = AuthController.hash(req.body.password, salt)
-  //   console.log(salt)
-  //   console.log(AuthController.valid(req.body.password + 'a', salt, hash))
-  //   // console.log(req)
-
-  //   await pool.query('SELECT * FROM categories', (err, result) => {
-  //     if (err) throw (err)
-  //     if (result.length > 0) {
-  //       res.json(result[0])
-  //     }
-  //     else res.status(404).json({ text: 'Image not found' })
-  //   });
-  //   // })
-  // }
 
   public async login(req: Request<{}, {}, { email: string, password: string }>, res: Response) {
 
     await pool.query('SELECT hash, salt, id, email FROM users WHERE email = ?', req.body.email, (err, result) => {
       let currentDate = new Date();
       if (err) console.log(err)
-      if (result[0] && AuthController.valid(req.body.password, result[0].salt, result[0].hash)) {
+      if (result[0] && PasswordHelper.valid(req.body.password, result[0].salt, result[0].hash)) {
         const access_token = sign({
           id: result[0].id,
           email: result[0].email
@@ -58,18 +29,25 @@ class AuthController {
     });
   }
 
-  public async register(req: Request<{}, {}, { email: string, password: string }>, res: Response) {
+  public async register(req: Request, res: Response) {
     const id = randomUUID();
-    let salt = AuthController.salt()
-    let hash = AuthController.hash(req.body.password, salt)
-    await pool.query('INSERT INTO users set ?', { email: req.body.email, salt, hash, id }, (err, result) => {
+    const { email, name, familyName } = req.body;
+    const { salt, hash } = PasswordHelper.getPasswordData(req.body.password)
+    await pool.query('INSERT INTO users set ?', { email, name, familyName, salt, hash, id }, (err, result) => {
       if (err) console.log(err)
       res.json({ id });
     });
   }
 
+  public async changePassword(req: Request, res: Response) {
+    const { salt, hash } = PasswordHelper.getPasswordData(req.body.password)
+    await pool.query('UPDATE users set ? WHERE id = ?', [{ salt, hash }, req.params.USER_DECODED_ID], (err, result) => {
+      if (err) console.log(err)
+      res.json(result[0]);
+    });
+  }
+
   public async userInfo(req: Request, res: Response) {
-    console.log(req.params.USER_DECODED_ID)
     await pool.query('SELECT id, name, familyName, email FROM  users WHERE id = ?', req.params.USER_DECODED_ID, (err, result) => {
       if (err) console.log(err)
       res.json(result[0]);

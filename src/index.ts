@@ -10,6 +10,7 @@ import categoriesRoutes from "./routes/categories.routes";
 import authRoutes from "./routes/auth.routes";
 import 'dotenv/config'
 import dashboardRoutes from "./routes/dashboard.routes";
+import usersRoutes from "./routes/users.routes";
 class Server {
     public app: Application;
 
@@ -35,6 +36,7 @@ class Server {
         this.app.use('/api/categories', categoriesRoutes)
         this.app.use('/api/auth', authRoutes)
         this.app.use('/api/dashboard', dashboardRoutes)
+        this.app.use('/api/users', usersRoutes)
     }
 
     start() {
