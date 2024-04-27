@@ -9,8 +9,13 @@ class ValidateTokenHandler {
     let authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith("Bearer")) {
       token = authHeader.split(" ")[1];
+      if (!token) {
+        res.status(401).json('unauthorized');
+        next();
+      }
       verify(token, process.env.JWT_SECRET, (err, dec) => {
         if (err) {
+          console.log('err')
           res.status(401).json('unauthorized');
         }
         else {
@@ -18,6 +23,9 @@ class ValidateTokenHandler {
           next();
         }
       })
+    } else {
+      res.status(401).json('unauthorized');
+
     }
   }
 }

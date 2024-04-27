@@ -28,7 +28,7 @@ class DashboardController {
     await pool.query(
       'SELECT p.*, usr.name AS lastEditorName, usr.familyName AS lastEditorFamilyName, u.name AS authorName, u.familyName AS authorFamilyName  ' +
       'FROM publications p LEFT JOIN users AS u ON p.authorId = u.id  LEFT JOIN users AS usr ON p.lastEditorId = usr.id ' +
-      'ORDER BY p.created DESC LIMIT 10'
+      'ORDER BY p.updated DESC LIMIT 10'
       , (err, result) => {
         if (err) throw (err)
         res.json(result);
