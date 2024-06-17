@@ -2,9 +2,7 @@ import express, { Application } from "express";
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import cors from 'cors'
-import donationsRoutes from "./routes/donations.routes"
 import indexRoutes from "./routes/index.routes"
-import imagesRoutes from "./routes/images.routes";
 import publicationsRoutes from "./routes/publications.routes";
 import categoriesRoutes from "./routes/categories.routes";
 import authRoutes from "./routes/auth.routes";
@@ -21,7 +19,7 @@ class Server {
     }
 
     config() {
-        this.app.set('port', process.env.PORT || 3000)
+        this.app.set('port', process.env.SERVER_PORT || 3000)
         this.app.use(morgan('dev'));
         this.app.use(cors());
         this.app.use(bodyParser.json({ limit: '100mb' }));
@@ -30,8 +28,6 @@ class Server {
 
     routes() {
         this.app.use(indexRoutes)
-        this.app.use('/api/donations', donationsRoutes)
-        this.app.use('/api/images', imagesRoutes)
         this.app.use('/api/publications', publicationsRoutes)
         this.app.use('/api/categories', categoriesRoutes)
         this.app.use('/api/auth', authRoutes)

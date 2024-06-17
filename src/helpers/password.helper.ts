@@ -23,5 +23,5 @@ export class PasswordHelper {
     return this.hash(password, salt) === hash
   }
 
-
 }
+
