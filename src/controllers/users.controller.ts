@@ -20,7 +20,6 @@ class UsersController {
     });
   }
 
-
   public async delete(req: Request, res: Response) {
     await pool.query('DELETE FROM users WHERE id = ?', req.params.id, (err, result) => {
       if (err) throw (err)
